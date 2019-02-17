@@ -15,7 +15,7 @@ spec:
       serviceAccountName: pig-operator
       containers:
         - name: pig-operator
-          image: gkarthics/pigops-operator:v0.0.1
+          image: gkarthics/pigops-operator:v0.0.2
           command:
           - pig-operator
           imagePullPolicy: Always

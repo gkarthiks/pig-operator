@@ -4,6 +4,8 @@ import (
 	"context"
 	"reflect"
 
+	"k8s.io/apimachinery/pkg/api/resource"
+
 	pigopsv1alpha1 "github.com/gkarthiks/pig-operator/pig-operator/pkg/apis/pigops/v1alpha1"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -186,13 +188,23 @@ func (r *ReconcilePigops) newDeploymentForPigops(p *pigopsv1alpha1.Pigops) *apps
 				},
 				Spec: corev1.PodSpec{
 					Containers: []corev1.Container{{
-						Image:   "prometheus:master",
-						Name:    "prometheus",
-						Command: []string{"--storage.tsdb.retention=5d", "--config.file=/etc/config/prometheus.yml", "--storage.tsdb.path=/data", "--web.console.libraries=/etc/prometheus/console_libraries", "--web.console.templates=/etc/prometheus/consoles", "--web.enable-lifecycle"},
+						Image: "prom/prometheus:master",
+						Name:  "prometheus",
+						Args:  []string{"--storage.tsdb.retention=5d", "--config.file=/etc/config/prometheus.yml", "--storage.tsdb.path=/data", "--web.console.libraries=/etc/prometheus/console_libraries", "--web.console.templates=/etc/prometheus/consoles", "--web.enable-lifecycle"},
 						Ports: []corev1.ContainerPort{{
 							ContainerPort: 9090,
 							Name:          "prometheus",
 						}},
+						Resources: corev1.ResourceRequirements{
+							Requests: corev1.ResourceList{
+								corev1.ResourceCPU:    resource.MustParse("100m"),
+								corev1.ResourceMemory: resource.MustParse("1Gi"),
+							},
+							Limits: corev1.ResourceList{
+								corev1.ResourceCPU:    resource.MustParse("1"),
+								corev1.ResourceMemory: resource.MustParse("1Gi"),
+							},
+						},
 					}},
 				},
 			},
