@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pig-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: pig-operator
+  template:
+    metadata:
+      labels:
+        name: pig-operator
+    spec:
+      serviceAccountName: pig-operator
+      containers:
+        - name: pig-operator
+          # Replace this with the built image name
+          image: REPLACE_IMAGE
+          command:
+          - pig-operator
+          imagePullPolicy: Always
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "pig-operator"
