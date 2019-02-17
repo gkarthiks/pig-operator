@@ -1,0 +1,6 @@
+apiVersion: pigops.gkarthiks.io/v1alpha1
+kind: Pigops
+metadata:
+  name: metrics-ops
+spec:
+  size: 1

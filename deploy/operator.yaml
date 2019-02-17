@@ -15,11 +15,17 @@ spec:
       serviceAccountName: pig-operator
       containers:
         - name: pig-operator
-          # Replace this with the built image name
-          image: REPLACE_IMAGE
+          image: gkarthics/pigops-operator:v0.0.1
           command:
           - pig-operator
           imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 1
+              memory: 1Gi
+            requests:
+              cpu: 300m
+              memory: 512Mi
           env:
             - name: WATCH_NAMESPACE
               valueFrom:
